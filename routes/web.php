@@ -15,6 +15,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+
+    return view('welcome');
+
+});
+
+Route::get('message', function () {
+
     AppSendMessagesEvent::dispatch("New Messages");
-    // return view('welcome');
+
+});
+
+Route::get('/v1/chat-app', function () {
+    return view("v1.core.core");
+});
+
+Route::get('/v2/chat-app', function () {
+    return view("v2.core.core");
 });
