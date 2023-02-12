@@ -58,4 +58,21 @@ class AppAuthController extends Controller
         return response()->json("user not found!", 404);
     }
 
+    public function sign_out(Request $request)
+    {
+        $user = $request->user();
+        $user->currentAccessToken()->delete();
+
+        return response()->json(["msg" => "Sign Out Success!"], 200);
+    }
+
+    public function email_verify()
+    {
+        # code...
+    }
+
+    public function forgot_password()
+    {
+        # code...
+    }
 }
