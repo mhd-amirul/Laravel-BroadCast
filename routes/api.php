@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\AppAuthController;
+use App\Http\Controllers\AppChatController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('sign-out', [AppAuthController::class, "sign_out"]);
 });
+
+Route::post('chat-app', [AppChatController::class, "message"]);
+
+Route::post('sign-up', [AppAuthController::class, "sign_up"]);
+Route::post('sign-in', [AppAuthController::class, "sign_in"]);
