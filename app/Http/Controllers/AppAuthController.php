@@ -31,5 +31,31 @@ class AppAuthController extends Controller
         return response()->json("sign up success!", 200);
     }
 
+    public function sign_in(Request $request)
+    {
+        $val = Validator::make($request->all(), [
+            "email" => "required",
+            "password" => "required"
+        ]);
+
+        if ($val->fails()) {
+            return response()->json($val->errors(), 400);
+        }
+
+        $user = User::where("email", $request->email)->first();
+
+        if ($user) {
+            if (Hash::check($request->password, $user->password)) {
+
+                $token = $user->createToken("token")->plainTextToken;
+
+                return response()->json(["msg" => "sign in success!", "token" => $token], 200);
+            }
+
+            return response()->json("email or password not compatible!", 400);
+        }
+
+        return response()->json("user not found!", 404);
+    }
 
 }
