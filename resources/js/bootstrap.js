@@ -36,7 +36,7 @@ window.Echo = new Echo({
     enabledTransports: ["ws", "wss"],
 });
 
-window.Echo.channel("Appmessage").listen(".Appmessage", (event) => {
-    console.log("Sending message completed!");
-    console.log(event);
-});
+// window.Echo.channel("Appmessage").listen(".Appmessage", (event) => {
+//     console.log("Sending message completed!");
+//     console.log(event);
+// });
