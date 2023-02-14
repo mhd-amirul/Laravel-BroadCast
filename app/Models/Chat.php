@@ -9,6 +9,7 @@ class Chat extends Model
 {
     use HasFactory;
 
+    protected $dateFormat = 'Y-m-d H:i:s';
     protected $guarded = ["id"];
 
     public function messages()

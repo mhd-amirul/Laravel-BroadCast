@@ -10,7 +10,7 @@ class Message extends Model
     use HasFactory;
 
     protected $table = "messages";
-
+    protected $dateFormat = 'Y-m-d H:i:s';
     protected $guarded = ["id"];
 
     public function Chat()
