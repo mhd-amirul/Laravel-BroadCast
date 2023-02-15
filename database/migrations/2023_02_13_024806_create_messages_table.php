@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string("message");
             $table->foreignId("chat_id")->references("id")->on("chats")->onDelete("cascade");
-            $table->foreignId("sender_id")->references("id")->on("users")->onDelete("cascade");
-            $table->foreignId("to_id")->references("id")->on("users")->onDelete("cascade");
+            $table->string("sender_id");
+            $table->string("to_id");
             $table->timestamps();
         });
     }
