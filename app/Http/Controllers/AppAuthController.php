@@ -2,33 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResponseFormatter;
+use App\Http\Requests\auth\signUpRequest;
 use App\Models\User;
+use App\Services\Interfaces\api_auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class AppAuthController extends Controller
 {
-    public function sign_up(Request $request)
+    protected $api_auth;
+
+    public function __construct(api_auth $api_auth)
     {
-        $user = $request->all();
+        $this->api_auth = $api_auth;
+    }
 
-        $val = Validator::make($user, [
-            "email" => "required|email|unique:users,email",
-            "name" => "required",
-            "password" => "required|confirmed",
-            "password_confirmation" => "required"
-        ]);
+    public function sign_up(signUpRequest $request)
+    {
+        $user = $this->api_auth->sign_up($request->all());
 
-        if ($val->fails()) {
-            return response()->json($val->errors(), 400);
-        }
-
-        $user["password"] = Hash::make($user["password"]);
-
-        User::create($user);
-
-        return response()->json("sign up success!", 200);
+        return ResponseFormatter::success($user, "sign up success!");
     }
 
     public function sign_in(Request $request)
