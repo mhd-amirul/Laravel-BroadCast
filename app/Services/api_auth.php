@@ -42,4 +42,9 @@ class api_auth implements InterfacesApi_auth {
 
         return ["message" => "user not found!", "code" => 404];
     }
+
+    public function sign_out($user)
+    {
+        $user->currentAccessToken()->delete();
+    }
 }
