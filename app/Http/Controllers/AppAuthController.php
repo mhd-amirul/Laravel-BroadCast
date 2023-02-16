@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ResponseFormatter;
+use App\Http\Requests\auth\signInRequest;
 use App\Http\Requests\auth\signUpRequest;
-use App\Models\User;
 use App\Services\Interfaces\api_auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 class AppAuthController extends Controller
 {
@@ -26,31 +24,14 @@ class AppAuthController extends Controller
         return ResponseFormatter::success($user, "sign up success!");
     }
 
-    public function sign_in(Request $request)
+    public function sign_in(signInRequest $request)
     {
-        $val = Validator::make($request->all(), [
-            "email" => "required",
-            "password" => "required"
-        ]);
 
-        if ($val->fails()) {
-            return response()->json($val->errors(), 400);
-        }
+        $sigin = $this->api_auth->sign_in($request->all());
 
-        $user = User::where("email", $request->email)->first();
-
-        if ($user) {
-            if (Hash::check($request->password, $user->password)) {
-
-                $token = $user->createToken("token")->plainTextToken;
-
-                return response()->json(["msg" => "sign in success!", "token" => $token], 200);
-            }
-
-            return response()->json("email or password not compatible!", 400);
-        }
-
-        return response()->json("user not found!", 404);
+        return ($sigin["code"]) == 400 || ($sigin["code"]) == 404
+            ? ResponseFormatter::error(null, $sigin["message"], $sigin["code"])
+            : ResponseFormatter::success($sigin["token"], $sigin["message"]);
     }
 
     public function sign_out(Request $request)
