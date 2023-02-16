@@ -36,10 +36,9 @@ class AppAuthController extends Controller
 
     public function sign_out(Request $request)
     {
-        $user = $request->user();
-        $user->currentAccessToken()->delete();
+        $this->api_auth->sign_out($request->user());
 
-        return response()->json(["msg" => "Sign Out Success!"], 200);
+        return ResponseFormatter::success(null, "Sign Out Success!");
     }
 
     public function email_verify()
