@@ -50,6 +50,8 @@ class AppMessageController extends Controller
 
         $chat = Chat::where("user_id", auth()->user()->email."_|_".$request->friendChat)->select("id")->first();
 
+        empty($chat) ? $chat = $this->create_chat($request->friendChat) : null;
+
         $msg = [
             "chat_id" => $chat->id,
             "message" => $request->msg,
@@ -61,6 +63,11 @@ class AppMessageController extends Controller
         $chat->update(["updated_at" => Carbon::now()]);
 
         return response()->json($chat);
+    }
+
+    public function create_chat($friendChat)
+    {
+        return Chat::create(["user_id" => auth()->user()->email."_|_".$friendChat]);
     }
 
     public function get_message()
