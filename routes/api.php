@@ -18,13 +18,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('sign-out', [AppAuthController::class, "sign_out"]);
+
+    Route::get('load-msg', [AppMessageController::class, "load_message"]);
+    Route::post('create-msg', [AppMessageController::class, "created_message"]);
+
+    Route::get('recent-chat', [AppChatController::class, "get_recent_chat"]);
 });
-Route::post('create-msg', [AppMessageController::class, "created_message"]);
 
 Route::post('chat-app', [AppChatController::class, "message"]);
 
 Route::post('sign-up', [AppAuthController::class, "sign_up"]);
 Route::post('sign-in', [AppAuthController::class, "sign_in"]);
 
-Route::get('recent-chat', [AppChatController::class, "get_recent_chat"]);
-Route::get('load-msg', [AppMessageController::class, "load_message"]);
