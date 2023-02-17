@@ -13,13 +13,17 @@ class AppChatController extends Controller
         # code...
     }
 
-    public function get_recent_chat($user_id = 1)
+    public function get_recent_chat()
     {
-        $chat = Chat::whereJsonContains("user_id", $user_id)->orderBy("updated_at", "desc")->get();
+        // get chat
+        $chat = Chat::where("user_id", "LIKE", "%" . auth()->user()->email . "%")->orderBy("updated_at", "desc")->get();
 
-        // $messages = $chat->map(function ($chat) {
-        //     return $chat->messages;
-        // });
+        // get last message
+        $chat->map(function ($chat) {
+            $msg = $chat->messages->sort(function ($a, $b) { return $b["created_at"] <=> $a["created_at"]; })->take(1);
+            $chat->message = array_values($msg->toArray());
+            unset($chat->messages);
+        });
 
         return response()->json($chat);
     }
