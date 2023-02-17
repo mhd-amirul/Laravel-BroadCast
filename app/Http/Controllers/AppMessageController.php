@@ -37,7 +37,31 @@ class AppMessageController extends Controller
         return response()->json(array_values($messages->toArray()));
     }
 
+    public function created_message(Request $request)
+    {
+        $request->validate([
+            "friendChat" => "required|email",
+            "msg" => "required",
+        ]);
 
+        $to = User::where("email", $request->friendChat)->exists();
+
+        if( $to == false ) return "err";
+
+        $chat = Chat::where("user_id", auth()->user()->email."_|_".$request->friendChat)->select("id")->first();
+
+        $msg = [
+            "chat_id" => $chat->id,
+            "message" => $request->msg,
+            "sender_id" => auth()->user()->email,
+            "to_id" => $request->friendChat
+        ];
+
+        $msg = Message::create($msg);
+        $chat->update(["updated_at" => Carbon::now()]);
+
+        return response()->json($chat);
+    }
 
     public function get_message()
     {
