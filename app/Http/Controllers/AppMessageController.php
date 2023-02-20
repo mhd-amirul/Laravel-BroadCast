@@ -75,7 +75,12 @@ class AppMessageController extends Controller
         # code...
     }
 
-    public function delete_message()
+    public function delete_for_me()
+    {
+        # code...
+    }
+
+    public function delete_for_all()
     {
         # code...
     }
