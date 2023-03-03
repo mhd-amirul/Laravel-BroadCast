@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Chat;
 use App\Services\Interfaces\api_chat as InterfacesApi_chat;
+use Illuminate\Database\Eloquent\Collection;
 
 class api_chat implements InterfacesApi_chat {
 
@@ -21,8 +22,13 @@ class api_chat implements InterfacesApi_chat {
     {
         // get chat
         $chat = $this->get_chat_user_auth($email, "DESC");
+        $chat = $this->load_last_messages($chat);
 
-        // get last message
+        return $chat;
+    }
+
+    public function load_last_messages(Collection $chat)
+    {
         $chat->map(function ($chat) {
             $msg = $chat->messages->sort(function ($a, $b) { return $b["created_at"] <=> $a["created_at"]; })->take(1);
             $chat->message = array_values($msg->toArray());
