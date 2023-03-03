@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\AppSendMessagesEvent;
+use App\Http\Requests\messages\loadMsgRequest;
 use App\Models\Chat;
 use App\Models\Message;
 use App\Models\User;
@@ -18,7 +19,7 @@ class AppMessageController extends Controller
         return [];
     }
 
-    public function load_message(Request $request)
+    public function load_message(loadMsgRequest $request)
     {
 
         $chat = Chat::where("user_id", auth()->user()->email."_|_".$request->friendChat)->first();
