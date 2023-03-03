@@ -7,7 +7,7 @@ use App\Services\Interfaces\api_chat as InterfacesApi_chat;
 
 class api_chat implements InterfacesApi_chat {
 
-    public function get_chat($email, $ord = "ASC")
+    public function get_chat_user_auth($email, $ord = "ASC")
     {
         return Chat::where("user_id", "LIKE", "%" . $email . "%")->orderBy("updated_at", $ord)->get();
     }
@@ -15,7 +15,7 @@ class api_chat implements InterfacesApi_chat {
     public function get_recent_chat($email)
     {
         // get chat
-        $chat = $this->get_chat($email, "DESC");
+        $chat = $this->get_chat_user_auth($email, "DESC");
 
         // get last message
         $chat->map(function ($chat) {
