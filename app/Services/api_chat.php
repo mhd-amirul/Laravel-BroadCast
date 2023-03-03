@@ -12,6 +12,11 @@ class api_chat implements InterfacesApi_chat {
         return Chat::where("user_id", "LIKE", "%" . $email . "%")->orderBy("updated_at", $ord)->get();
     }
 
+    public function get_chat_user_auth_with_partner($friendChat)
+    {
+        return Chat::where("user_id", auth()->user()->email."_|_".$friendChat)->first();
+    }
+
     public function get_recent_chat($email)
     {
         // get chat
